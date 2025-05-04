@@ -16,7 +16,22 @@ public class DeepseekResponse {
     private String system_fingerprint;
 
     public <T> T getResult(Class<T> clazz) {
-        return DeepseekUtils.getResult(this.choices.get(0).getMessage().getContent(), clazz);
+        return getResult(0, clazz);
+    }
+
+    public <T> T getResult(int index, Class<T> clazz) {
+        if (index < 0 || index >= this.choices.size()) {
+            return null;
+        }
+        return DeepseekUtils.getResult(this.choices.get(index).getMessage().getContent(), clazz);
+    }
+
+    public <T> List<T> getResultList(Class<T> clazz) {
+        ArrayList<T> ts = new ArrayList<>();
+        for (int i = 0; i < this.choices.size(); i++) {
+            ts.add(this.getResult(i, clazz));
+        }
+        return ts;
     }
 
     public List<String> getResults() {
