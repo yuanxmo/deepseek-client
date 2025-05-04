@@ -1,6 +1,8 @@
 package com.yuanxmo.deepseek.domain.response;
+import com.yuanxmo.deepseek.utils.DeepseekUtils;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,6 +14,19 @@ public class DeepseekResponse {
     private List<Choice> choices;
     private Usage usage;
     private String system_fingerprint;
+
+    public <T> T getResult(Class<T> clazz) {
+        return DeepseekUtils.getResult(this.choices.get(0).getMessage().getContent(), clazz);
+    }
+
+    public List<String> getResults() {
+        ArrayList<String> contents = new ArrayList<>();
+        for (Choice choice : choices) {
+            String content = choice.getMessage().getContent();
+            contents.add(content);
+        }
+        return contents;
+    }
 
     @Override
     public String toString() {
