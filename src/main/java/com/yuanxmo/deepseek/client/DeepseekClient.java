@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.yuanxmo.deepseek.domain.request.DeepseekRequest;
 import com.yuanxmo.deepseek.domain.request.DeepseekRequestMessage;
 import com.yuanxmo.deepseek.domain.response.DeepseekResponse;
+import com.yuanxmo.deepseek.enums.DeepseekRole;
 import com.yuanxmo.deepseek.properties.DeepseekProperties;
 import com.yuanxmo.deepseek.utils.DeepseekModelUtils;
 import com.yuanxmo.deepseek.utils.DeepseekUrlUtils;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
@@ -17,13 +19,15 @@ public class DeepseekClient {
     private DeepseekRequestMessage systemMessage;
     private OkHttpClient client = new OkHttpClient();
 
-    public DeepseekClient(DeepseekProperties properties) {
-        this.properties = properties;
+    public DeepseekClient(@Autowired DeepseekProperties deepseekProperties) {
+        this.properties = deepseekProperties;
+        if (!(deepseekProperties.getSystemMessage().isEmpty())) {
+            this.systemMessage = new DeepseekRequestMessage(
+                    DeepseekRole.SYSTEM, deepseekProperties.getSystemMessage()
+            );
+        }
     }
 
-    public DeepseekClient(DeepseekProperties properties, DeepseekRequestMessage systemMessage) {
-        this.properties = properties;
-    }
 
     private Request getRequest(DeepseekRequest request) {
         return new Request.Builder()

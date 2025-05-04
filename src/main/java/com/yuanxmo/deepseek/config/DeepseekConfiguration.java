@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 public class DeepseekConfiguration {
 
     @Bean
-    @ConditionalOnBean
     public DeepseekClient deepseekClient(@Autowired DeepseekProperties deepseekProperties) {
         return new DeepseekClient(deepseekProperties);
     }
