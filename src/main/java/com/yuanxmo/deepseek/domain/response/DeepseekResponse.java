@@ -15,11 +15,11 @@ public class DeepseekResponse {
     private Usage usage;
     private String system_fingerprint;
 
-    public <T> T getResult(Class<T> clazz) {
-        return getResult(0, clazz);
+    public <T> T getResultObject(Class<T> clazz) {
+        return getResultObject(0, clazz);
     }
 
-    public <T> T getResult(int index, Class<T> clazz) {
+    public <T> T getResultObject(int index, Class<T> clazz) {
         if (index < 0 || index >= this.choices.size()) {
             return null;
         }
@@ -29,7 +29,7 @@ public class DeepseekResponse {
     public <T> List<T> getResultList(Class<T> clazz) {
         ArrayList<T> ts = new ArrayList<>();
         for (int i = 0; i < this.choices.size(); i++) {
-            ts.add(this.getResult(i, clazz));
+            ts.add(this.getResultObject(i, clazz));
         }
         return ts;
     }
